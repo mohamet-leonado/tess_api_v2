@@ -532,5 +532,49 @@
             </table>
         </div>
     </main>
+
+    <script>
+        // --- ADMIN AUTHORIZATION CHECK ---
+        const API_BASE = 'https://cytostomal-nonsubtractive-bryanna.ngrok-free.dev';
+        const token = localStorage.getItem('wt_token');
+
+        if (!token) {
+            alert('Bạn chưa đăng nhập! Vui lòng truy cập bằng tài khoản Admin.');
+            window.location.href = 'index.html';
+        } else {
+            // Check if user is admin via API
+            fetch(`${API_BASE}/api/Auth/me`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true'
+                }
+            })
+            .then(res => {
+                if (!res.ok) throw new Error('Not authorized');
+                return res.json();
+            })
+            .then(user => {
+                const userRole = typeof user.role === 'string' ? user.role.toLowerCase() : '';
+                const userRoles = Array.isArray(user.roles) ? user.roles.map(r => r.toLowerCase()) : [];
+                const isUserAdmin = 
+                    userRole === 'admin' || 
+                    userRoles.includes('admin') || 
+                    user.isAdmin === true || 
+                    (user.userName && user.userName.toLowerCase() === 'admin') ||
+                    (user.mail && user.mail.toLowerCase().startsWith('admin'));
+
+                if (!isUserAdmin) {
+                    alert('Bạn không có quyền truy cập trang quản trị!');
+                    window.location.href = 'index.html';
+                }
+            })
+            .catch(err => {
+                alert('Phiên đăng nhập không hợp lệ hoặc bạn không có quyền.');
+                localStorage.removeItem('wt_token');
+                window.location.href = 'index.html';
+            });
+        }
+    </script>
 </body>
 </html>

@@ -706,6 +706,12 @@ async function loadCurrentUser() {
 function updateUserUI() {
     const authBtns = document.getElementById('auth-buttons');
     const userMenu = document.getElementById('user-menu');
+    const navAdmin = document.getElementById('nav-admin');
+    const mobileNavAdmin = document.getElementById('mobile-nav-admin');
+    
+    // Default admin links to hidden
+    if (navAdmin) navAdmin.style.display = 'none';
+    if (mobileNavAdmin) mobileNavAdmin.style.display = 'none';
     
     if (state.user && state.token) {
         authBtns.style.display = 'none';
@@ -714,8 +720,24 @@ function updateUserUI() {
         const avatar = document.getElementById('user-avatar-img');
         if (state.user.image) {
             avatar.src = state.user.image;
+            avatar.style.display = 'block';
         } else {
             avatar.style.display = 'none';
+        }
+        
+        // Admin verification logic
+        const userRole = typeof state.user.role === 'string' ? state.user.role.toLowerCase() : '';
+        const userRoles = Array.isArray(state.user.roles) ? state.user.roles.map(r => r.toLowerCase()) : [];
+        const isUserAdmin = 
+            userRole === 'admin' || 
+            userRoles.includes('admin') || 
+            state.user.isAdmin === true || 
+            (state.user.userName && state.user.userName.toLowerCase() === 'admin') ||
+            (state.user.mail && state.user.mail.toLowerCase().startsWith('admin'));
+            
+        if (isUserAdmin) {
+            if (navAdmin) navAdmin.style.display = 'block';
+            if (mobileNavAdmin) mobileNavAdmin.style.display = 'block';
         }
     } else {
         authBtns.style.display = 'flex';
