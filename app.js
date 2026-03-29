@@ -836,6 +836,92 @@ function showToast(message, type = 'info') {
 }
 
 // =============================================
+// PROFILE PAGE
+// =============================================
+async function openProfile() {
+    if (!state.user || !state.token) {
+        showToast('Vui lòng đăng nhập trước', 'info');
+        showModal('login');
+        return;
+    }
+    
+    navigateTo('profile');
+    document.getElementById('profile-content').innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Đang tải dữ liệu...</p></div>';
+    
+    try {
+        const user = state.user; // Already fetched by loadCurrentUser
+        let totalFollows = state.followedComics ? state.followedComics.size : 0;
+        
+        const joinDate = user.createdAt
+            ? new Date(user.createdAt).toLocaleDateString('vi-VN', { year: 'numeric', month: 'long', day: 'numeric' })
+            : 'Không rõ';
+
+        const roleLabel = (user.role === 'ADMIN' || user.roles?.includes('ADMIN')) ? 'Admin' : 'Thành viên';
+        const roleClass = (user.role === 'ADMIN' || user.roles?.includes('ADMIN')) ? 'admin' : '';
+        const statusLabel = user.banned ? '🔴 Bị cấm' : '🟢 Đang hoạt động';
+
+        document.getElementById('profile-content').innerHTML = `
+            <div class="profile-header-card">
+                <div class="profile-avatar-large" onclick="document.getElementById('avatar-upload').click()" title="Đổi Avatar">
+                    ${user.image ? `<img src="${user.image}" alt="avatar">` : (user.userName || 'U')[0].toUpperCase()}
+                </div>
+                <div class="profile-header-info">
+                    <div class="profile-name-lg">${user.userName || 'Người dùng'}</div>
+                    <div class="profile-email-badge">✉️ ${user.mail || user.email || '—'}</div>
+                    <br>
+                    <span class="profile-role-badge ${roleClass}">${roleLabel}</span>
+                </div>
+            </div>
+
+            <div class="profile-stats-container">
+                <div class="profile-stat-box">
+                    <div class="profile-stat-icon">📖</div>
+                    <div class="profile-stat-number">${totalFollows}</div>
+                    <div class="profile-stat-text">Truyện đang theo dõi</div>
+                </div>
+                <div class="profile-stat-box">
+                    <div class="profile-stat-icon">📅</div>
+                    <div class="profile-stat-number" style="font-size:1.25rem; margin-top:0.5rem; margin-bottom:0.75rem">${joinDate}</div>
+                    <div class="profile-stat-text">Ngày tham gia</div>
+                </div>
+                <div class="profile-stat-box">
+                    <div class="profile-stat-icon">⭐</div>
+                    <div class="profile-stat-number" style="font-size:1.1rem; margin-top:0.6rem; margin-bottom:0.8rem">${statusLabel}</div>
+                    <div class="profile-stat-text">Trạng thái</div>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom:1.5rem; font-size:1.25rem">📋 Thông Tin Chi Tiết</h3>
+            <div class="profile-details-grid">
+                <div class="profile-detail-item">
+                    <div class="profile-detail-icon">👤</div>
+                    <div class="profile-detail-info">
+                        <h4>Tên đăng nhập</h4>
+                        <p>${user.userName || '—'}</p>
+                    </div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="profile-detail-icon">📧</div>
+                    <div class="profile-detail-info">
+                        <h4>Email</h4>
+                        <p>${user.mail || user.email || '—'}</p>
+                    </div>
+                </div>
+                <div class="profile-detail-item">
+                    <div class="profile-detail-icon">🆔</div>
+                    <div class="profile-detail-info">
+                        <h4>ID Tài Khoản</h4>
+                        <p style="font-family:monospace; font-size:0.85rem">${user.accountId || user.id || '—'}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    } catch (err) {
+        document.getElementById('profile-content').innerHTML = '<div class="empty-state"><span class="empty-icon">⚠️</span><p>Không thể tải thông tin</p></div>';
+    }
+}
+
+// =============================================
 // HEADER SCROLL
 // =============================================
 window.addEventListener('scroll', () => {

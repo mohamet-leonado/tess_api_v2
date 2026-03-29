@@ -45,6 +45,7 @@
                         <span id="user-name-display"></span>
                     </button>
                     <div class="user-dropdown" id="user-dropdown">
+                        <a href="#" onclick="openProfile(); toggleUserDropdown();">👤 Thông Tin Tài Khoản</a>
                         <a href="#" onclick="document.getElementById('avatar-upload').click()">🖼️ Đổi Avatar</a>
                         <input type="file" id="avatar-upload" style="display:none" accept="image/*" onchange="handleAvatarChange(event)">
                         <a href="#" onclick="navigateTo('follows')">📖 Truyện Theo Dõi</a>
@@ -181,6 +182,139 @@
                 <div class="empty-state" id="empty-follows" style="display:none">
                     <span class="empty-icon">📖</span>
                     <p>Bạn chưa theo dõi truyện nào</p>
+                </div>
+        <!-- Profile Page -->
+        <section id="page-profile" class="page">
+            <style>
+                .profile-header-card {
+                    background: var(--surface);
+                    border: 1px solid var(--surface-border);
+                    border-radius: 1rem;
+                    padding: 2rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 2rem;
+                    margin-bottom: 2rem;
+                    margin-top: 2rem;
+                    flex-wrap: wrap;
+                }
+                .profile-avatar-large {
+                    width: 120px;
+                    height: 120px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, var(--primary), var(--secondary));
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 3rem;
+                    color: white;
+                    cursor: pointer;
+                    overflow: hidden;
+                    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.5);
+                    border: 4px solid var(--bg);
+                    transition: transform 0.3s;
+                }
+                .profile-avatar-large:hover {
+                    transform: scale(1.05);
+                }
+                .profile-avatar-large img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                .profile-name-lg {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    margin-bottom: 0.5rem;
+                }
+                .profile-email-badge {
+                    display: inline-block;
+                    background: rgba(255,255,255,0.05);
+                    padding: 0.25rem 0.75rem;
+                    border-radius: 20px;
+                    font-size: 0.875rem;
+                    color: var(--text-muted);
+                    margin-bottom: 1rem;
+                }
+                .profile-role-badge {
+                    display: inline-block;
+                    padding: 0.25rem 0.75rem;
+                    border-radius: 20px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    background: rgba(99, 102, 241, 0.2);
+                    color: var(--primary);
+                }
+                .profile-role-badge.admin {
+                    background: rgba(236, 72, 153, 0.2);
+                    color: var(--secondary);
+                }
+                .profile-stats-container {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 1.5rem;
+                    margin-bottom: 3rem;
+                }
+                .profile-stat-box {
+                    background: var(--surface);
+                    border: 1px solid var(--surface-border);
+                    border-radius: 1rem;
+                    padding: 1.5rem;
+                    text-align: center;
+                }
+                .profile-stat-icon {
+                    font-size: 2rem;
+                    margin-bottom: 1rem;
+                }
+                .profile-stat-number {
+                    font-size: 1.5rem;
+                    font-weight: 700;
+                    color: var(--primary);
+                    margin-bottom: 0.25rem;
+                }
+                .profile-stat-text {
+                    font-size: 0.875rem;
+                    color: var(--text-muted);
+                }
+                .profile-details-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                    gap: 1.5rem;
+                }
+                .profile-detail-item {
+                    display: flex;
+                    align-items: center;
+                    gap: 1rem;
+                    padding: 1rem;
+                    background: rgba(255,255,255,0.02);
+                    border-radius: 0.75rem;
+                }
+                .profile-detail-icon {
+                    width: 40px;
+                    height: 40px;
+                    background: rgba(255,255,255,0.05);
+                    border-radius: 0.5rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1.25rem;
+                }
+                .profile-detail-info h4 {
+                    font-size: 0.75rem;
+                    color: var(--text-muted);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                    margin-bottom: 0.25rem;
+                }
+                .profile-detail-info p {
+                    font-weight: 500;
+                }
+            </style>
+            <div class="container page-padding">
+                <h2 class="page-title">👤 Thông Tin Tài Khoản</h2>
+                
+                <div id="profile-content">
+                    <div class="loading-spinner"><div class="spinner"></div><p>Đang tải dữ liệu...</p></div>
                 </div>
             </div>
         </section>
