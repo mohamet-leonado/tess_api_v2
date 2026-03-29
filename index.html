@@ -25,6 +25,7 @@
                     <div class="dropdown-menu" id="genre-menu"></div>
                 </div>
                 <a href="#" class="nav-link" data-page="search" onclick="navigateTo('search')">Tìm Kiếm</a>
+                <a href="#" class="nav-link" data-page="follows" id="nav-follows" style="display:none" onclick="navigateTo('follows')">Theo Dõi</a>
                 <a href="admin.html" class="nav-link" data-page="admin" id="nav-admin" style="display:none">Admin</a>
             </nav>
             <div class="header-actions">
@@ -48,7 +49,6 @@
                         <a href="#" onclick="openProfile(); toggleUserDropdown();">👤 Thông Tin Tài Khoản</a>
                         <a href="#" onclick="document.getElementById('avatar-upload').click()">🖼️ Đổi Avatar</a>
                         <input type="file" id="avatar-upload" style="display:none" accept="image/*" onchange="handleAvatarChange(event)">
-                        <a href="#" onclick="navigateTo('follows')">📖 Truyện Theo Dõi</a>
                         <hr>
                         <a href="#" onclick="logout()">🚪 Đăng Xuất</a>
                     </div>
@@ -70,7 +70,7 @@
         <div class="mobile-menu-links">
             <a href="#" onclick="navigateTo('home'); toggleMobileMenu()">🏠 Trang Chủ</a>
             <a href="#" onclick="navigateTo('search'); toggleMobileMenu()">🔍 Tìm Kiếm</a>
-            <a href="#" onclick="navigateTo('follows'); toggleMobileMenu()">📖 Theo Dõi</a>
+            <a href="#" id="mobile-nav-follows" style="display:none" onclick="navigateTo('follows'); toggleMobileMenu()">📖 Theo Dõi</a>
             <a href="admin.html" id="mobile-nav-admin" style="display:none">⚙️ Admin</a>
         </div>
     </div>
@@ -183,6 +183,9 @@
                     <span class="empty-icon">📖</span>
                     <p>Bạn chưa theo dõi truyện nào</p>
                 </div>
+            </div>
+        </section>
+
         <!-- Profile Page -->
         <section id="page-profile" class="page">
             <style>

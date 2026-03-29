@@ -708,14 +708,22 @@ function updateUserUI() {
     const userMenu = document.getElementById('user-menu');
     const navAdmin = document.getElementById('nav-admin');
     const mobileNavAdmin = document.getElementById('mobile-nav-admin');
+    const navFollows = document.getElementById('nav-follows');
+    const mobileNavFollows = document.getElementById('mobile-nav-follows');
     
-    // Default admin links to hidden
+    // Default admin and follows links to hidden
     if (navAdmin) navAdmin.style.display = 'none';
     if (mobileNavAdmin) mobileNavAdmin.style.display = 'none';
+    if (navFollows) navFollows.style.display = 'none';
+    if (mobileNavFollows) mobileNavFollows.style.display = 'none';
     
     if (state.user && state.token) {
         authBtns.style.display = 'none';
         userMenu.style.display = 'block';
+        
+        // Show follows link for all logged-in users
+        if (navFollows) navFollows.style.display = 'block';
+        if (mobileNavFollows) mobileNavFollows.style.display = 'block';
         document.getElementById('user-name-display').textContent = state.user.userName || state.user.mail || 'User';
         const avatar = document.getElementById('user-avatar-img');
         if (state.user.image) {
