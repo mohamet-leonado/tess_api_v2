@@ -95,7 +95,7 @@ function initIntroScreen() {
 
 // Add floating elements animation
 function initFloatingElements() {
-    const floatingElements = document.querySelectorAll('.floating-elements > div');
+    const floatingElements = document.querySelectorAll('.floating-shape');
     floatingElements.forEach((element, index) => {
         // Mouse interaction
         element.addEventListener('mouseenter', () => {
@@ -230,7 +230,7 @@ function playIntroSound() {
         }
         
         // Add sound to floating elements
-        const floatingElements = document.querySelectorAll('.floating-elements > div');
+        const floatingElements = document.querySelectorAll('.floating-shape');
         floatingElements.forEach((element) => {
             element.addEventListener('click', () => {
                 createBeep(800, 0.2);

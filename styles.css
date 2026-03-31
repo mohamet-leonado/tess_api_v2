@@ -169,7 +169,7 @@
 }
 
 /* =============================================
-   INTRO SCREEN - GRAND ANIMATION
+   INTRO SCREEN - GRAND ANIMATION (NO EMOJI)
    ============================================= */
 
 .intro-screen {
@@ -277,14 +277,58 @@
 }
 
 .logo-icon-large {
-    font-size: 4rem;
     margin-bottom: 1rem;
-    display: block;
+    display: flex;
+    justify-content: center;
     animation: 
         bounceIn 1.5s ease-out 1s both,
         float 4s ease-in-out 2.5s infinite,
         pulseGlow 3s ease-in-out 2.5s infinite;
-    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.5));
+}
+
+/* CSS Book Icon */
+.book-icon {
+    position: relative;
+    width: 60px;
+    height: 45px;
+}
+
+.book-cover {
+    position: absolute;
+    width: 60px;
+    height: 45px;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    border-radius: 4px;
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+    animation: bookOpen 2s ease-in-out infinite alternate;
+}
+
+.book-pages {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 54px;
+    height: 39px;
+    background: linear-gradient(to right, #f8fafc 0%, #e2e8f0 100%);
+    border-radius: 2px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.book-pages::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    right: 8px;
+    height: 2px;
+    background: var(--accent-primary);
+    opacity: 0.3;
+    box-shadow: 0 6px 0 rgba(99, 102, 241, 0.3), 0 12px 0 rgba(99, 102, 241, 0.3);
+}
+
+@keyframes bookOpen {
+    0% { transform: perspective(200px) rotateY(0deg); }
+    100% { transform: perspective(200px) rotateY(-15deg); }
 }
 
 .logo-text-container {
@@ -373,7 +417,7 @@
     opacity: 0;
 }
 
-/* Feature Icons */
+/* Feature Icons with CSS */
 .intro-features {
     display: flex;
     justify-content: center;
@@ -396,13 +440,18 @@
 .feature-item:nth-child(3) { animation-delay: 4.9s; }
 
 .feature-icon {
-    font-size: 2rem;
-    padding: 1rem;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background: rgba(99, 102, 241, 0.1);
     border: 2px solid rgba(99, 102, 241, 0.3);
     border-radius: 50%;
     animation: float 3s ease-in-out infinite;
     transition: all var(--transition-base);
+    position: relative;
+    overflow: hidden;
 }
 
 .feature-item:nth-child(2) .feature-icon { animation-delay: 1s; }
@@ -415,10 +464,197 @@
     box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
 }
 
+/* Fire Icon */
+.fire-icon {
+    position: relative;
+}
+
+.flame {
+    position: absolute;
+    background: linear-gradient(to top, #f43f5e 0%, #fb923c 50%, #fbbf24 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    animation: flicker 1.5s ease-in-out infinite alternate;
+}
+
+.flame-1 {
+    width: 20px;
+    height: 25px;
+    left: 50%;
+    bottom: 45%;
+    transform: translateX(-50%);
+    animation-delay: 0s;
+}
+
+.flame-2 {
+    width: 15px;
+    height: 20px;
+    left: 40%;
+    bottom: 40%;
+    transform: translateX(-50%);
+    animation-delay: 0.3s;
+}
+
+.flame-3 {
+    width: 12px;
+    height: 18px;
+    left: 60%;
+    bottom: 42%;
+    transform: translateX(-50%);
+    animation-delay: 0.6s;
+}
+
+@keyframes flicker {
+    0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
+    100% { transform: translateX(-50%) scale(1.1) rotate(2deg); }
+}
+
+/* Mobile Icon */
+.mobile-icon .phone-body {
+    width: 24px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%);
+    border-radius: 6px;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.phone-screen {
+    position: absolute;
+    top: 4px;
+    left: 3px;
+    width: 18px;
+    height: 24px;
+    background: #1e293b;
+    border-radius: 2px;
+    animation: screenGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes screenGlow {
+    0% { background: #1e293b; }
+    100% { background: #334155; box-shadow: inset 0 0 8px rgba(99, 102, 241, 0.5); }
+}
+
+/* Free Icon */
+.free-icon {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+    border-color: rgba(34, 197, 94, 0.5) !important;
+}
+
+.free-text {
+    font-size: 10px;
+    font-weight: 900;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
 .feature-item span {
     font-size: 0.9rem;
     color: var(--text-secondary);
     font-weight: 500;
+}
+
+/* Floating Shapes instead of emoji */
+.floating-elements {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.floating-shape {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    animation: floatAround 15s linear infinite;
+    opacity: 0.7;
+}
+
+.circle {
+    background: var(--accent-primary);
+    border-radius: 50%;
+    top: 20%; 
+    left: 10%; 
+    animation-delay: 0s; 
+    animation-duration: 20s;
+}
+
+.triangle {
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 17px solid var(--accent-secondary);
+    background: transparent;
+    top: 30%; 
+    right: 15%; 
+    animation-delay: -3s; 
+    animation-duration: 18s;
+}
+
+.square {
+    background: linear-gradient(45deg, #a855f7, #c084fc);
+    border-radius: 3px;
+    bottom: 30%; 
+    left: 20%; 
+    animation-delay: -6s; 
+    animation-duration: 22s;
+}
+
+.diamond {
+    background: #fbbf24;
+    transform: rotate(45deg);
+    top: 60%; 
+    right: 25%; 
+    animation-delay: -9s; 
+    animation-duration: 16s;
+}
+
+.hexagon {
+    background: #22c55e;
+    width: 20px;
+    height: 11px;
+    position: relative;
+    bottom: 20%; 
+    right: 10%; 
+    animation-delay: -12s; 
+    animation-duration: 24s;
+}
+
+.hexagon:before,
+.hexagon:after {
+    content: "";
+    position: absolute;
+    width: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+
+.hexagon:before {
+    bottom: 100%;
+    border-bottom: 6px solid #22c55e;
+}
+
+.hexagon:after {
+    top: 100%;
+    border-top: 6px solid #22c55e;
+}
+
+.star {
+    background: #fb7185;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    top: 10%; 
+    left: 30%; 
+    animation-delay: -15s; 
+    animation-duration: 19s;
+}
+
+@keyframes floatAround {
+    0% { transform: translateY(0px) rotate(0deg); }
+    25% { transform: translateY(-20px) rotate(90deg); }
+    50% { transform: translateY(0px) rotate(180deg); }
+    75% { transform: translateY(-15px) rotate(270deg); }
+    100% { transform: translateY(0px) rotate(360deg); }
 }
 
 /* Loading Progress */
@@ -529,66 +765,6 @@
     animation: pulseGlow 1s ease-in-out infinite;
 }
 
-/* Floating Elements */
-.floating-elements {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.floating-elements > div {
-    position: absolute;
-    font-size: 1.5rem;
-    animation: floatAround 15s linear infinite;
-    opacity: 0.7;
-}
-
-.floating-book { 
-    top: 20%; 
-    left: 10%; 
-    animation-delay: 0s; 
-    animation-duration: 20s;
-}
-.floating-star { 
-    top: 30%; 
-    right: 15%; 
-    animation-delay: -3s; 
-    animation-duration: 18s;
-}
-.floating-heart { 
-    bottom: 30%; 
-    left: 20%; 
-    animation-delay: -6s; 
-    animation-duration: 22s;
-}
-.floating-fire { 
-    top: 60%; 
-    right: 25%; 
-    animation-delay: -9s; 
-    animation-duration: 16s;
-}
-.floating-gem { 
-    bottom: 20%; 
-    right: 10%; 
-    animation-delay: -12s; 
-    animation-duration: 24s;
-}
-.floating-magic { 
-    top: 10%; 
-    left: 30%; 
-    animation-delay: -15s; 
-    animation-duration: 19s;
-}
-
-@keyframes floatAround {
-    0% { transform: translateY(0px) rotate(0deg); }
-    25% { transform: translateY(-20px) rotate(90deg); }
-    50% { transform: translateY(0px) rotate(180deg); }
-    75% { transform: translateY(-15px) rotate(270deg); }
-    100% { transform: translateY(0px) rotate(360deg); }
-}
-
 /* Skip Button */
 .intro-skip-btn {
     position: absolute;
@@ -631,8 +807,24 @@
         font-size: 1rem;
     }
     
-    .floating-elements > div {
-        font-size: 1.2rem;
+    .floating-shape {
+        width: 15px;
+        height: 15px;
+    }
+    
+    .book-icon {
+        width: 50px;
+        height: 38px;
+    }
+    
+    .book-cover {
+        width: 50px;
+        height: 38px;
+    }
+    
+    .book-pages {
+        width: 44px;
+        height: 32px;
     }
 }
 
@@ -651,6 +843,11 @@
     
     .logo-underline {
         width: 150px;
+    }
+    
+    .feature-icon {
+        width: 50px;
+        height: 50px;
     }
 }
 *, *::before, *::after {
@@ -2696,15 +2893,15 @@ body::-webkit-scrollbar-thumb:hover { background: var(--accent-primary); }
 }
 
 /* Enhanced Logo Glow */
-.logo-icon-large::before {
-    content: '📚';
+.book-icon::before {
+    content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    font-size: inherit;
+    inset: -10px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
     filter: blur(20px);
     opacity: 0.5;
     animation: iconGlow 4s ease-in-out infinite alternate;
+    z-index: -1;
 }
 
 @keyframes iconGlow {
