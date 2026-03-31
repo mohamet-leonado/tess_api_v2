@@ -12,7 +12,8 @@
 </head>
 <body>
     <!-- Intro Loading Screen -->
-    <div id="intro-screen" class="intro-screen active">
+    <!-- To see intro again: Open DevTools Console and run: localStorage.removeItem('wt_intro_seen') then refresh -->
+    <div id="intro-screen" class="intro-screen">
         <!-- Animated Background -->
         <div class="intro-bg">
             <div class="intro-particles"></div>
@@ -80,13 +81,13 @@
             <div class="intro-loading">
                 <div class="loading-text">Đang tải nội dung...</div>
                 <div class="loading-bar">
-                    <div class="loading-progress"></div>
+                    <div class="loading-progress" id="intro-progress"></div>
                 </div>
-                <div class="loading-percentage">0%</div>
+                <div class="loading-percentage" id="intro-percentage">0%</div>
             </div>
             
             <!-- Enter Button -->
-            <button class="intro-enter-btn" id="intro-enter-btn" onclick="skipIntro()">
+            <button class="intro-enter-btn" id="intro-enter-btn" style="opacity: 0; pointer-events: none;">
                 <span>Bắt Đầu Khám Phá</span>
                 <div class="btn-glow"></div>
             </button>
@@ -103,7 +104,7 @@
         </div>
         
         <!-- Skip Button -->
-        <button class="intro-skip-btn" onclick="skipIntro()">Bỏ qua ›</button>
+        <button class="intro-skip-btn" id="intro-skip-btn">Bỏ qua ›</button>
     </div>
 
     <!-- Header -->

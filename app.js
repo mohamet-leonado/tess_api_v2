@@ -24,25 +24,33 @@ function markIntroSeen() {
 function skipIntro() {
     const introScreen = document.getElementById('intro-screen');
     if (introScreen) {
+        introAnimationComplete = true;
         markIntroSeen();
         introScreen.classList.add('hidden');
+        document.body.style.overflow = 'auto';
+        
+        // Remove intro screen from DOM after transition
         setTimeout(() => {
-            introScreen.style.display = 'none';
-            document.body.style.overflow = 'auto';
+            introScreen.remove();
         }, 1000);
     }
 }
 
 // Animate loading progress
 function animateLoadingProgress() {
-    const progressBar = document.querySelector('.loading-progress');
-    const percentageText = document.querySelector('.loading-percentage');
+    const progressBar = document.getElementById('intro-progress');
+    const percentageText = document.getElementById('intro-percentage');
     
     if (!progressBar || !percentageText) return;
     
     let progress = 0;
+    const duration = 3000; // 3 seconds
+    const steps = 60;
+    const increment = 100 / steps;
+    const stepDuration = duration / steps;
+    
     const interval = setInterval(() => {
-        progress += Math.random() * 15;
+        progress += increment + Math.random() * 5;
         if (progress > 100) progress = 100;
         
         progressBar.style.width = progress + '%';
@@ -54,7 +62,7 @@ function animateLoadingProgress() {
                 showEnterButton();
             }, 500);
         }
-    }, 200);
+    }, stepDuration);
 }
 
 // Show enter button
@@ -62,6 +70,7 @@ function showEnterButton() {
     const enterBtn = document.getElementById('intro-enter-btn');
     if (enterBtn) {
         enterBtn.style.opacity = '1';
+        enterBtn.style.pointerEvents = 'auto';
         enterBtn.style.animation = 'bounceIn 1s ease-out both, pulseGlow 2s ease-in-out infinite';
     }
 }
@@ -72,13 +81,26 @@ function initIntroScreen() {
     if (hasSeenIntro()) {
         const introScreen = document.getElementById('intro-screen');
         if (introScreen) {
-            introScreen.style.display = 'none';
+            introScreen.remove();
         }
+        document.body.style.overflow = 'auto';
         return;
     }
     
     // Prevent body scroll during intro
     document.body.style.overflow = 'hidden';
+    
+    // Add event listeners
+    const enterBtn = document.getElementById('intro-enter-btn');
+    const skipBtn = document.getElementById('intro-skip-btn');
+    
+    if (enterBtn) {
+        enterBtn.addEventListener('click', skipIntro);
+    }
+    
+    if (skipBtn) {
+        skipBtn.addEventListener('click', skipIntro);
+    }
     
     // Start loading animation after logo animation
     setTimeout(() => {
@@ -99,187 +121,22 @@ function initFloatingElements() {
     floatingElements.forEach((element, index) => {
         // Mouse interaction
         element.addEventListener('mouseenter', () => {
+            const currentAnimation = element.style.animation;
             element.style.animation = 'wobble 0.6s ease-in-out';
             setTimeout(() => {
-                element.style.animation = `floatAround ${15 + index * 2}s linear infinite`;
+                element.style.animation = currentAnimation;
             }, 600);
         });
         
         // Click interaction
         element.addEventListener('click', () => {
+            const currentAnimation = element.style.animation;
             element.style.animation = 'bounce 1s ease-in-out';
             setTimeout(() => {
-                element.style.animation = `floatAround ${15 + index * 2}s linear infinite`;
+                element.style.animation = currentAnimation;
             }, 1000);
         });
     });
-}
-
-// Add parallax effect to intro background
-function initParallaxEffect() {
-    let mouseX = 0;
-    let mouseY = 0;
-    
-    document.addEventListener('mousemove', (e) => {
-        mouseX = (e.clientX / window.innerWidth) * 100;
-        mouseY = (e.clientY / window.innerHeight) * 100;
-        
-        const particles = document.querySelector('.intro-particles');
-        const waves = document.querySelector('.intro-waves');
-        
-        if (particles) {
-            particles.style.transform = `translate(${mouseX * 0.02}px, ${mouseY * 0.02}px)`;
-        }
-        
-        if (waves) {
-            waves.style.transform = `translate(${mouseX * 0.01}px, ${mouseY * 0.01}px)`;
-        }
-    });
-}
-
-// Add typing effect to intro text
-function initTypingEffect() {
-    const title = document.querySelector('.intro-title');
-    const subtitle = document.querySelector('.intro-subtitle');
-    
-    if (title && subtitle) {
-        const titleText = title.textContent;
-        const subtitleText = subtitle.textContent;
-        
-        // Clear text initially
-        setTimeout(() => {
-            title.textContent = '';
-            subtitle.textContent = '';
-            
-            // Type title
-            typeText(title, titleText, 100, () => {
-                // Type subtitle after title
-                setTimeout(() => {
-                    typeText(subtitle, subtitleText, 80);
-                }, 500);
-            });
-        }, 3000);
-    }
-}
-
-// Typing animation function
-function typeText(element, text, speed, callback) {
-    let i = 0;
-    const timer = setInterval(() => {
-        element.textContent += text.charAt(i);
-        i++;
-        if (i >= text.length) {
-            clearInterval(timer);
-            if (callback) callback();
-        }
-    }, speed);
-}
-
-// Add interactive feature icons
-function initFeatureIcons() {
-    const featureItems = document.querySelectorAll('.feature-item');
-    
-    featureItems.forEach((item, index) => {
-        item.addEventListener('mouseenter', () => {
-            // Add glow effect
-            item.style.filter = 'drop-shadow(0 0 20px rgba(99, 102, 241, 0.5))';
-            
-            // Animate other items
-            featureItems.forEach((otherItem, otherIndex) => {
-                if (otherIndex !== index) {
-                    otherItem.style.opacity = '0.6';
-                    otherItem.style.transform = 'scale(0.95)';
-                }
-            });
-        });
-        
-        item.addEventListener('mouseleave', () => {
-            item.style.filter = 'none';
-            
-            // Reset other items
-            featureItems.forEach((otherItem) => {
-                otherItem.style.opacity = '1';
-                otherItem.style.transform = 'scale(1)';
-            });
-        });
-    });
-}
-
-// Add sound effects (optional)
-function playIntroSound() {
-    // Create audio context for sound effects
-    if (typeof AudioContext !== 'undefined' || typeof webkitAudioContext !== 'undefined') {
-        const audioContext = new (AudioContext || webkitAudioContext)();
-        
-        // Create a simple beep sound for interactions
-        function createBeep(frequency, duration) {
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
-            
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
-            
-            oscillator.frequency.value = frequency;
-            oscillator.type = 'sine';
-            
-            gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
-            
-            oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + duration);
-        }
-        
-        // Add sound to floating elements
-        const floatingElements = document.querySelectorAll('.floating-shape');
-        floatingElements.forEach((element) => {
-            element.addEventListener('click', () => {
-                createBeep(800, 0.2);
-            });
-        });
-        
-        // Add sound to enter button
-        const enterBtn = document.getElementById('intro-enter-btn');
-        if (enterBtn) {
-            enterBtn.addEventListener('click', () => {
-                createBeep(1000, 0.3);
-            });
-        }
-    }
-}
-
-// Enhanced intro initialization
-function initIntroScreen() {
-    // If user has seen intro before, skip it
-    if (hasSeenIntro()) {
-        const introScreen = document.getElementById('intro-screen');
-        if (introScreen) {
-            introScreen.style.display = 'none';
-        }
-        return;
-    }
-    
-    // Prevent body scroll during intro
-    document.body.style.overflow = 'hidden';
-    
-    // Initialize all effects
-    setTimeout(() => {
-        initParallaxEffect();
-        initTypingEffect();
-        initFeatureIcons();
-        playIntroSound();
-    }, 1000);
-    
-    // Start loading animation after logo animation
-    setTimeout(() => {
-        animateLoadingProgress();
-    }, 6000);
-    
-    // Auto-skip after 15 seconds if user doesn't interact
-    setTimeout(() => {
-        if (!introAnimationComplete) {
-            skipIntro();
-        }
-    }, 15000);
 }
 
 // Initialize when DOM is loaded

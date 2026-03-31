@@ -182,14 +182,14 @@
     justify-content: center;
     opacity: 1;
     visibility: visible;
-    transition: all 1s ease-in-out;
+    transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
     overflow: hidden;
 }
 
 .intro-screen.hidden {
     opacity: 0;
     visibility: hidden;
-    transform: scale(1.1);
+    pointer-events: none;
 }
 
 /* Animated Background */
