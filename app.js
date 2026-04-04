@@ -2,7 +2,7 @@
    WebTruyện - Frontend Application
    ============================================= */
 
-const API_BASE = 'https://cytostomal-nonsubtractive-bryanna.ngrok-free.dev';
+const API_BASE = 'https://backendapi-production-5207.up.railway.app';
 const THUMB_CDN = 'https://img.otruyenapi.com/uploads/comics/';
 
 // =============================================
