@@ -166,7 +166,6 @@ let state = {
 async function apiFetch(endpoint, options = {}) {
     const headers = {
         'Content-Type': 'application/json',
-        'ngrok-skip-browser-warning': 'true',
         ...options.headers,
     };
     if (state.token) {
@@ -592,9 +591,7 @@ async function readChapter(comicId, apiUrl, chapterName) {
     document.getElementById('reading-content').innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Đang tải trang truyện...</p></div>';
     
     try {
-        const res = await fetch(apiUrl, {
-            headers: { 'ngrok-skip-browser-warning': 'true' }
-        });
+        const res = await fetch(apiUrl, {});
         const data = await res.json();
         
         if (data.data && data.data.item) {

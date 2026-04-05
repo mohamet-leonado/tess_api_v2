@@ -531,7 +531,7 @@
 
     <script>
         // --- ADMIN AUTHORIZATION CHECK ---
-        const API_BASE = 'https://cytostomal-nonsubtractive-bryanna.ngrok-free.dev';
+        const API_BASE = 'https://backendapi-production-5207.up.railway.app';
         const token = localStorage.getItem('wt_token');
 
         if (!token) {
@@ -542,8 +542,7 @@
             fetch(`${API_BASE}/api/Auth/me`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                    'ngrok-skip-browser-warning': 'true'
+                    'Content-Type': 'application/json'
                 }
             })
             .then(res => {
