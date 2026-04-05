@@ -821,7 +821,7 @@ async function handleRegister() {
     try {
         const data = await apiFetch('/api/Auth/register', {
             method: 'POST',
-            body: JSON.stringify({ email, userName, password }),
+            body: JSON.stringify({ mail: email, userName, password }),
         });
         showToast('Đăng ký thành công! Hãy đăng nhập.', 'success');
         showModal('login');
