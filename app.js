@@ -175,7 +175,9 @@ async function apiFetch(endpoint, options = {}) {
         const res = await fetch(`${API_BASE}${endpoint}`, { ...options, headers });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const text = await res.text();
-        return text ? JSON.parse(text) : {};
+        const parsed = text ? JSON.parse(text) : {};
+        // Normalize .NET $values format (ReferenceHandler.Preserve)
+        return (parsed && parsed.$values) ? parsed.$values : parsed;
     } catch (err) {
         console.error('API Error:', err);
         throw err;
@@ -289,18 +291,20 @@ async function loadComics(page = 1) {
     try {
         const data = await apiFetch(`/api/Comics/page?page=${page}`);
         const container = document.getElementById('comics-grid');
+        const comics = Array.isArray(data) ? data : [];
         
-        if (data.content && data.content.length > 0) {
-            container.innerHTML = data.content.map(renderComicCard).join('');
-            state.totalPages = data.totalPages || 1;
+        if (comics.length > 0) {
+            container.innerHTML = comics.map(renderComicCard).join('');
             state.comicsPage = page;
-            renderPagination('pagination-home', data.totalPages, page, (p) => {
+            // Show pagination if full page returned (backend pageSize = 20)
+            const estimatedTotal = comics.length === 20 ? page + 1 : page;
+            renderPagination('pagination-home', estimatedTotal, page, (p) => {
                 state.comicsPage = p;
                 loadComics(p);
             });
             
             // Update stats
-            document.getElementById('stat-comics').textContent = formatNumber(data.totalElements || 0);
+            document.getElementById('stat-comics').textContent = formatNumber(comics.length);
         } else {
             container.innerHTML = '<div class="empty-state"><span class="empty-icon">📚</span><p>Chưa có truyện nào</p></div>';
         }
