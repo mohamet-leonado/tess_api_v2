@@ -783,10 +783,11 @@ async function handleLogin() {
         
         if (data.token) {
             state.token = data.token;
+            state.user = data.user || null;
             localStorage.setItem('wt_token', data.token);
             showToast('Đăng nhập thành công!', 'success');
             closeModal();
-            loadCurrentUser();
+            updateUserUI();
             loadFollowedIds();
         } else if (data.message) {
             showToast(data.message, 'error');
@@ -833,8 +834,8 @@ async function handleRegister() {
 async function loadCurrentUser() {
     if (!state.token) return;
     try {
-        const user = await apiFetch('/api/Auth/me');
-        state.user = user;
+        const data = await apiFetch('/api/Auth/profile');
+        state.user = data.user || data;
         updateUserUI();
     } catch (err) {
         // Token expired
